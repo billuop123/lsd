@@ -40,6 +40,12 @@ fn list_directory(
             Ok(entry) => {
                 let entry_path = entry.path();
                 let entry_name = entry_path.file_name().unwrap_or_default().to_str().unwrap_or("").to_string();
+
+                // Skip hidden files and directories
+                if entry_name.starts_with('.') {
+                    continue;
+                }
+
                 let metadata = entry.metadata().unwrap();
                 let size = metadata.len();
                 let modified = metadata.modified().unwrap_or(SystemTime::UNIX_EPOCH);
@@ -56,6 +62,7 @@ fn list_directory(
         }
     }
 
+    // Sorting logic
     if sort_by_name {
         directories.sort_by(|a, b| a.0.cmp(&b.0));
         files.sort_by(|a, b| a.0.cmp(&b.0));
@@ -70,6 +77,7 @@ fn list_directory(
         others.sort_by(|a, b| a.2.cmp(&b.2));
     }
 
+    // Print directories first if specified
     if group_dirs_first {
         for (dir, size, modified) in &directories {
             if !filter_files {
@@ -78,16 +86,19 @@ fn list_directory(
         }
     }
 
+    // Print files
     for (file, size, modified) in &files {
         if !filter_dirs {
             print_entry(file, *size, *modified, "📄", indent_level, Color::Green);
         }
     }
 
+    // Print other entries (if any)
     for (other, size, modified) in &others {
         print_entry(other, *size, *modified, "🔗", indent_level, Color::Yellow);
     }
 
+    // Print directories last if not grouped first
     if !group_dirs_first {
         for (dir, size, modified) in &directories {
             if !filter_files {
@@ -96,8 +107,9 @@ fn list_directory(
         }
     }
 
+    // Recursive listing
     if recursive {
-        for (dir,        _, _) in &directories {
+        for (dir, _, _) in &directories {
             let new_path = Path::new(path).join(dir);
             println!("\n{}Subdirectory: {}", " ".repeat(indent_level * 2), dir);
             list_directory(

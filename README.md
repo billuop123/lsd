@@ -1,0 +1,6 @@
+--dir ------>To list all entries with directories first
+--recursive->To list entries recursively
+--sort-name->To sort entries by name
+--files----->To filter only files
+--dirs------>To filter only directories
+--dir --recursive --sort-name--->To combine options

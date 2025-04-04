@@ -1,6 +1,8 @@
---dir ------>To list all entries with directories first
---recursive->To list entries recursively
---sort-name->To sort entries by name
---files----->To filter only files
---dirs------>To filter only directories
---dir --recursive --sort-name--->To combine options
+## Flags:
+
+- **`--dir`**: Lists all entries with directories first.
+- **`--recursive`**: Lists entries recursively, showing contents of subdirectories.
+- **`--sort-name`**: Sorts entries by name.
+- **`--files`**: Filters the output to show only files.
+- **`--dirs`**: Filters the output to show only directories.
+- **Combining options**: You can combine multiple flags for custom output
